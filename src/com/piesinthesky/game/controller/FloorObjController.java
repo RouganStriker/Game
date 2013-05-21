@@ -78,7 +78,7 @@ public class FloorObjController extends ObjController{
 			Sprite floorTile = Engine.createSprite();
 
 			floorTile.setTexture(texture);
-			floorTile.setPosition(new Float2(0 + (i * blockWidth), boundary.bottom - floorTile.getHeight()));
+			floorTile.setPosition(new Float2(0 + (i * nBlockWidth), boundary.bottom - floorTile.getHeight()));
 			floorTile.addAnimation(new WarpBehavior(boundary, floorTile.getSize(), vel, true));
 			floorTile.setCollidable(false);
 			spriteList.add(floorTile);

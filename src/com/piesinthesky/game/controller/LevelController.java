@@ -4,6 +4,10 @@ import game.engine.Engine;
 import game.engine.Float2;
 
 import java.util.LinkedList;
+
+import com.piesinthesky.game.CommandsUtil;
+import com.piesinthesky.game.CommandsUtil.CommandType;
+import com.piesinthesky.game.CommandsUtil.ControllerType;
 import com.piesinthesky.game.Game;
 
 import android.graphics.Point;
@@ -13,19 +17,17 @@ import android.util.Log;
 public class LevelController {
 	private int nCurrentLevel;
 	private int nCurrentFloorTile;
-	private LinkedList<String> sInstructionsFloor;
+	private LinkedList<Integer> sInstructionsFloor;
 	
 	private int nTileMarker;
-	private int nTextureId;
-	private String sTargetController;
-	private String sControllerCommand;
+	private Integer controllerCommandParam;
+	private ControllerType targetController;
+	private CommandType controllerCommand;
 
 	private int nTileChangeCounter;
 	private boolean bEndOfLevel;
-	private final String FLOOR_DIRT = "d";
-	private final String FLOOR_STONE = "s";
-	private final String END_OF_LEVEL = "eol";
 	private FloorObjController tileController;
+	private SurfaceObjController obstacleController;
 
 	public LevelController() {
 		nCurrentLevel = 1;
@@ -40,13 +42,14 @@ public class LevelController {
 		Float2 vel = new Float2(-7, 0);
 
 		tileController  = new FloorObjController(boundary, vel, blockSize.x, nAvailableTiles);
+		obstacleController  = new SurfaceObjController(boundary, vel, blockSize.x, blockSize.y);
 		setupInstructionsFloor(nCurrentLevel);
 		retrieveNextFloorTileInstruction();
 	}
 	
 	public void updateLevel(){
 		tileController.animate();
-		
+		obstacleController.animate();
 		int currentFloorTile = tileController.getFloorCount();
 
 		if(nCurrentFloorTile != currentFloorTile){
@@ -55,6 +58,7 @@ public class LevelController {
 			if(nCurrentFloorTile == nTileMarker){
 				if(bEndOfLevel){
 					tileController.setAnimating(false);
+					obstacleController.setAnimating(false);
 					return;
 				}
 				else
@@ -64,7 +68,7 @@ public class LevelController {
 			}
 			
 			if(nTileChangeCounter > 0){
-				tileController.changeTexture(nTextureId);
+				tileController.changeTexture(controllerCommandParam.intValue());
 				nTileChangeCounter--;
 				
 				if(nTileChangeCounter == 0){
@@ -77,17 +81,19 @@ public class LevelController {
 	public void setupInstructionsFloor(int level){
 		switch (level) {
 			case 1:
-				sInstructionsFloor = new LinkedList<String>();
-				sInstructionsFloor.add("10");
-				sInstructionsFloor.add("f");
-				sInstructionsFloor.add("c");
-				sInstructionsFloor.add("1");
-				sInstructionsFloor.add("50");
-				sInstructionsFloor.add("f");
-				sInstructionsFloor.add("c");
-				sInstructionsFloor.add("0");
-				sInstructionsFloor.add("100");
-				sInstructionsFloor.add("eol");
+				sInstructionsFloor = new LinkedList<Integer>();
+				sInstructionsFloor.add(10);
+				sInstructionsFloor.add(0);
+				sInstructionsFloor.add(0);
+				sInstructionsFloor.add(1);
+				sInstructionsFloor.add(30);
+				sInstructionsFloor.add(0);
+				sInstructionsFloor.add(0);
+				sInstructionsFloor.add(0);
+				sInstructionsFloor.add(50);
+				sInstructionsFloor.add(2);
+				sInstructionsFloor.add(1);
+				sInstructionsFloor.add(null);
 				break;
 			default:
 				break;
@@ -95,27 +101,24 @@ public class LevelController {
 	}
 
 	private void retrieveNextFloorTileInstruction(){
-		try
+		if(sInstructionsFloor.size() >= 4)
 		{
-			if(sInstructionsFloor.size() < 4)
-			{
-				// No more instructions
-				bEndOfLevel = true;
-				return;
+			nTileMarker = sInstructionsFloor.removeFirst();
+			targetController = CommandsUtil.getControllerType(sInstructionsFloor.removeFirst());
+			controllerCommand = CommandsUtil.getCommandType(sInstructionsFloor.removeFirst());
+			controllerCommandParam = sInstructionsFloor.removeFirst();
+			
+			if(targetController == ControllerType.LEVEL  && controllerCommand == CommandType.END) {
+				if(sInstructionsFloor.size() <= 4)
+				{
+					bEndOfLevel = true;
+				}
 			}
-
-			nTileMarker = Integer.parseInt(sInstructionsFloor.removeFirst());
-			sTargetController = sInstructionsFloor.removeFirst();
-			sControllerCommand = sInstructionsFloor.removeFirst();
-			nTextureId = Integer.parseInt(sInstructionsFloor.removeFirst());
-		}
-		catch (NumberFormatException e)
-		{
-			Log.e("LevelController", "Expected tile number");
 		}
 	}
 	
 	public void draw() {
 		tileController.draw();
+		obstacleController.draw();
 	}
 }

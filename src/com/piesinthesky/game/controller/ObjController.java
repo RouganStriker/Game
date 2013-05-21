@@ -19,7 +19,7 @@ public abstract class ObjController {
 	
 	protected RectF boundary;
 	protected Float2 vel;
-	protected int blockWidth;
+	protected int nBlockWidth;
 
 	public ObjController(RectF boundary, Float2 vel, int blockWidth) {
 		setupTextureList();
@@ -27,7 +27,7 @@ public abstract class ObjController {
 		
 		this.boundary = boundary;
 		this.vel = vel;
-		this.blockWidth = blockWidth;
+		nBlockWidth = blockWidth;
 		bAnimating = false;
 		spritePool = new LinkedList<Sprite>();
 		spriteList = new LinkedList<Sprite>();

@@ -16,11 +16,14 @@ import android.graphics.RectF;
 
 public class SurfaceObjController extends ObjController{
 	public static final String ROCK_OBJ = "rock_obj.png";
-	
-	public SurfaceObjController(RectF boundary, Float2 vel, int blockWidth){
+	private int nBlockHeight;
+
+	public SurfaceObjController(RectF boundary, Float2 vel, int blockWidth, int blockHeight){
 		super(boundary, vel, blockWidth);
 		
+		nBlockHeight = blockHeight;
 		setupSprites();
+		bAnimating = true;
 	}
 
 	@Override
@@ -33,15 +36,22 @@ public class SurfaceObjController extends ObjController{
 	protected void setupSprites() {
 		Sprite spr = Engine.createSprite();
 		
-		spr.setPosition(new Float2(boundary.right - blockWidth/2, boundary.bottom));
+		spr.setTexture(textureList[0].getTexture());
+		spr.setPosition(new Float2(boundary.right - nBlockWidth/2, boundary.bottom - spr.getHeight() - nBlockHeight/2));
 		spr.addAnimation(new WarpBehavior(boundary, spr.getSize(), vel, true));
 		spr.setCollidable(true);
-		spritePool.add(spr);
+		spriteList.add(spr);
 	}
 
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
-		
+		if(bAnimating)
+		{
+			for(int i = 0; i < spriteList.size(); i++) {
+				Sprite spr = spriteList.get(i);
+
+				spr.animate();
+			}
+		}
 	}
 }
