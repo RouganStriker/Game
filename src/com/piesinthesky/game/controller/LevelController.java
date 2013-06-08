@@ -2,6 +2,7 @@ package com.piesinthesky.game.controller;
 
 import game.engine.Engine;
 import game.engine.Float2;
+import game.engine.Sprite;
 
 import java.util.LinkedList;
 
@@ -120,5 +121,14 @@ public class LevelController {
 	public void draw() {
 		tileController.draw();
 		obstacleController.draw();
+	}
+	
+	public LinkedList<Sprite> getObstacles(){
+		return obstacleController.getSpriteList();
+	}
+	
+	public void end(){
+		tileController.setAnimating(false);
+		obstacleController.setAnimating(false);
 	}
 }

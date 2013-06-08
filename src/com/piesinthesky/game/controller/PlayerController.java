@@ -29,7 +29,7 @@ public class PlayerController {
 		player.setTexture(playerTexture);
 		//player.setSize(PLAYER_BLOCK_SIZE);
 		player.setPosition(new Float2(0, SCREEN_HEIGHT - PLAYER_BLOCK_SIZE.y - 60));
-		player.setCollidable(false);
+		player.setCollidable(true);
 	}
 	
 	public void drawPlayer(){
@@ -45,5 +45,9 @@ public class PlayerController {
 			player.addAnimation(new JumpBehavior(new Float2(0, -15), 0.8f));
 			player.animate();
 		}
+	}
+	
+	public Sprite getSprite(){
+		return player;
 	}
 }

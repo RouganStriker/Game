@@ -1,6 +1,9 @@
 package com.piesinthesky.game;
 
+import java.util.LinkedList;
+
 import game.engine.Engine;
+import game.engine.FadingDeathAnimation;
 import game.engine.Sprite;
 import game.engine.Timer;
 import android.content.res.Resources;
@@ -9,6 +12,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Shader;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -27,6 +31,7 @@ public class Game extends Engine{
 		setScreenOrientation(Engine.ScreenModes.LANDSCAPE);
 		res = getResources();
 		timer = new Timer();
+		debug_showCollisionBoundaries = true;
 		instance = this;
 	}
 
@@ -58,8 +63,13 @@ public class Game extends Engine{
 	}
 
 	@Override
-	public void collision(Sprite sprite) {
-		// TODO Auto-generated method stub
+	public void collision(Sprite player) {
+		Log.d("Game", "Player died!");
+		player.removeAnimations();
+		player.addAnimation(new FadingDeathAnimation());
+		button1.setClickable(false);
+		button2.setClickable(false);
+		levelController.end();
 	}
 	
 	protected void initializeButtons(){
@@ -72,5 +82,19 @@ public class Game extends Engine{
 				playerController.playerJump();
 			}
 		});
-	}	
+	}
+	
+	@Override
+	protected void collisionTest(){
+		LinkedList<Sprite> playerSpriteList = new LinkedList<Sprite>();
+		playerSpriteList.add(playerController.getSprite());
+		collisionTest(playerSpriteList, levelController.getObstacles());
+	}
+	
+	@Override
+	protected void collisionCleanUp(){
+		LinkedList<Sprite> playerSpriteList = new LinkedList<Sprite>();
+		playerSpriteList.add(playerController.getSprite());
+		collisionCleanUp(playerSpriteList);
+	}
 }

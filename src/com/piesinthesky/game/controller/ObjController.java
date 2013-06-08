@@ -49,6 +49,10 @@ public abstract class ObjController {
 	
 	public abstract void animate();
 	
+	public LinkedList<Sprite> getSpriteList(){
+		return spriteList;
+	}
+	
 	public boolean command(char command, int param) {
 		switch (command) {
 			case 'c':

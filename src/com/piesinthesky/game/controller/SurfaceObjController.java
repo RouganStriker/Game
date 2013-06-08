@@ -37,7 +37,7 @@ public class SurfaceObjController extends ObjController{
 		Sprite spr = Engine.createSprite();
 		
 		spr.setTexture(textureList[0].getTexture());
-		spr.setPosition(new Float2(boundary.right - nBlockWidth/2, boundary.bottom - spr.getHeight() - nBlockHeight/2));
+		spr.setPosition(new Float2(boundary.right - nBlockWidth, boundary.bottom - spr.getHeight() - nBlockHeight/2));
 		spr.addAnimation(new WarpBehavior(boundary, spr.getSize(), vel, true));
 		spr.setCollidable(true);
 		spriteList.add(spr);
