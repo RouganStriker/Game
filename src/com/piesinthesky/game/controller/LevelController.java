@@ -131,4 +131,9 @@ public class LevelController {
 		tileController.setAnimating(false);
 		obstacleController.setAnimating(false);
 	}
+	
+	public void destroy(){
+		tileController.destroy();
+		obstacleController.destroy();
+	}
 }

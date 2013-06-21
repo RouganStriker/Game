@@ -3,16 +3,16 @@ package com.piesinthesky.game;
 import game.engine.Texture;
 
 public class TexturePair {
-	private String p_name;
+	private int p_id;
 	private Texture p_texture;
 	
-	public TexturePair(String name) {
-		p_name = name;
+	public TexturePair(int name) {
+		p_id = name;
 		p_texture = null;
 	}
 	
-	public String getName(){
-		return p_name;
+	public int getId(){
+		return p_id;
 	}
 	
 	public Texture getTexture(){

@@ -9,6 +9,7 @@ import game.engine.WarpBehavior;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.piesinthesky.game.R;
 import com.piesinthesky.game.TexturePair;
 
 import android.graphics.Point;
@@ -29,7 +30,7 @@ public class SurfaceObjController extends ObjController{
 	@Override
 	protected void setupTextureList() {
 		textureList = new TexturePair[1];
-		textureList[0] = new TexturePair(ROCK_OBJ);
+		textureList[0] = new TexturePair(R.drawable.rock_obj);
 	}
 
 	@Override

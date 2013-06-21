@@ -40,7 +40,7 @@ public abstract class ObjController {
 			TexturePair pair = textureList[i];
 			
 			if(pair.getTexture() == null) {
-				pair.setTexture(Engine.loadTexture(pair.getName()));
+				pair.setTexture(Engine.loadTexture(pair.getId()));
 			}
 		}
 	}
@@ -67,7 +67,7 @@ public abstract class ObjController {
 			Sprite sprite = spritePool.getFirst();
 			TexturePair pair = textureList[textureNumber];
 			
-			if(!sprite.getTexture().getName().equals(pair.getName())) {
+			if(!sprite.getTexture().getName().equals(Integer.toString(pair.getId()))) {
 				sprite.setTexture(pair.getTexture());
 			}
 			
@@ -94,5 +94,25 @@ public abstract class ObjController {
 	public void setAnimating(boolean animating)
 	{
 		bAnimating = animating;
+	}
+	
+	public void destroy(){
+		for(int i = 0; i < textureList.length; i++){
+			textureList[i].getTexture().clearBitmap();
+		}
+		
+		Iterator<Sprite> iter = spriteList.iterator();
+		
+		while(iter.hasNext()){
+			Sprite spr = iter.next();
+			spr.destroy();
+		}
+		
+		iter = spritePool.iterator();
+		
+		while(iter.hasNext()){
+			Sprite spr = iter.next();
+			spr.destroy();
+		}
 	}
 }

@@ -12,4 +12,6 @@
     <string name="btn_closePopup">Close</string>
     <string name="tutorial_text">In this tutorial you will learn about blah balh balh</string>
 
+    <string name="shutdown_intent_action">com.piesinthesky.game.intent.action.SHUTDOWN</string>
+    
 </resources>

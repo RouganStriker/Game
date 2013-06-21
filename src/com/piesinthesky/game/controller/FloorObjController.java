@@ -8,6 +8,7 @@ import game.engine.WarpBehavior;
 import android.graphics.Point;
 import android.graphics.RectF;
 
+import com.piesinthesky.game.R;
 import com.piesinthesky.game.TexturePair;
 
 public class FloorObjController extends ObjController{
@@ -66,8 +67,8 @@ public class FloorObjController extends ObjController{
 	@Override
 	protected void setupTextureList() {
 		textureList = new TexturePair[2];
-		textureList[0] = new TexturePair(DIRT_BLOCK);
-		textureList[1] = new TexturePair(STONE_BLOCK);
+		textureList[0] = new TexturePair(R.drawable.dirt_block);
+		textureList[1] = new TexturePair(R.drawable.stone_block);
 	}
 
 	@Override

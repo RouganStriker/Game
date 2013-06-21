@@ -3,6 +3,7 @@ package com.piesinthesky.game.controller;
 import game.engine.Engine;
 import game.engine.Float2;
 import game.engine.JumpBehavior;
+import com.piesinthesky.game.R;
 import game.engine.Sprite;
 import game.engine.Texture;
 import android.content.Context;
@@ -21,10 +22,10 @@ public class PlayerController {
 		engine = Game.getInstance();
 		setupPlayer();
 	}
-
+	
 	private void setupPlayer() {
-		Texture playerTexture = Engine.loadTexture(PLAYER_BLOCK);
-		
+		Texture playerTexture = Engine.loadTexture(R.drawable.character_princess);
+
 		player = Engine.createSprite();
 		player.setTexture(playerTexture);
 		//player.setSize(PLAYER_BLOCK_SIZE);
@@ -49,5 +50,9 @@ public class PlayerController {
 	
 	public Sprite getSprite(){
 		return player;
+	}
+	
+	public void destroy(){
+		player.destroy();
 	}
 }
