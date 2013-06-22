@@ -24,22 +24,21 @@ public final class R {
         public static final int tree_obj=0x7f020007;
     }
     public static final class id {
-        public static final int btn_closePopup=0x7f08000a;
-        public static final int btn_exit=0x7f080005;
+        public static final int btn_closePopup=0x7f080009;
         public static final int btn_play=0x7f080002;
-        public static final int btn_savePopup=0x7f080009;
+        public static final int btn_savePopup=0x7f080008;
         public static final int btn_settings=0x7f080004;
         public static final int btn_tut=0x7f080003;
-        public static final int button1=0x7f08000e;
-        public static final int button2=0x7f08000f;
-        public static final int buttonOverlay=0x7f08000d;
-        public static final int gameView=0x7f08000b;
-        public static final int greyOverlay=0x7f080006;
+        public static final int button1=0x7f08000d;
+        public static final int button2=0x7f08000e;
+        public static final int buttonOverlay=0x7f08000c;
+        public static final int gameView=0x7f08000a;
+        public static final int greyOverlay=0x7f080005;
         public static final int mainMenu=0x7f080000;
-        public static final int menu_settings=0x7f080010;
-        public static final int popupBtns=0x7f080008;
-        public static final int popupMainView=0x7f080007;
-        public static final int surfaceView=0x7f08000c;
+        public static final int menu_settings=0x7f08000f;
+        public static final int popupBtns=0x7f080007;
+        public static final int popupMainView=0x7f080006;
+        public static final int surfaceView=0x7f08000b;
         public static final int title=0x7f080001;
     }
     public static final class layout {
@@ -52,18 +51,19 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040001;
-        public static final int btn_closePopup=0x7f04000a;
-        public static final int btn_exit_str=0x7f040008;
+        public static final int btn_closePopup=0x7f040009;
+        public static final int btn_one=0x7f04000c;
         public static final int btn_play_str=0x7f040005;
-        public static final int btn_savePopup=0x7f040009;
+        public static final int btn_savePopup=0x7f040008;
         public static final int btn_settings_str=0x7f040007;
         public static final int btn_tut_str=0x7f040006;
+        public static final int btn_two=0x7f04000d;
         public static final int button1=0x7f040002;
         public static final int button2=0x7f040003;
         public static final int hello=0x7f040000;
         public static final int menu_settings=0x7f040004;
-        public static final int shutdown_intent_action=0x7f04000c;
-        public static final int tutorial_text=0x7f04000b;
+        public static final int shutdown_intent_action=0x7f04000b;
+        public static final int tutorial_text=0x7f04000a;
     }
     public static final class style {
         /** 

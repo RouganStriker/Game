@@ -23,13 +23,11 @@ public class MainMenu extends Activity implements OnClickListener{
 		Button playBtn = (Button) findViewById(R.id.btn_play);
 		Button tutorialBtn = (Button) findViewById(R.id.btn_tut);
 		Button settingsBtn = (Button) findViewById(R.id.btn_settings);
-		Button exitBtn = (Button) findViewById(R.id.btn_exit);
 		Button closeBtn = (Button) findViewById(R.id.btn_closePopup);
 		
 		playBtn.setOnClickListener(this);
 		tutorialBtn.setOnClickListener(this);
 		settingsBtn.setOnClickListener(this);
-		exitBtn.setOnClickListener(this);
 		closeBtn.setOnClickListener(this);
 	}
 
@@ -37,7 +35,6 @@ public class MainMenu extends Activity implements OnClickListener{
 		PLAY,
 		TUTORIAL,
 		SETTINGS,
-		EXIT;
 	}
 	
 	private void openPopup(MenuType menuType){
@@ -59,16 +56,12 @@ public class MainMenu extends Activity implements OnClickListener{
 		if (id == R.id.btn_play) {
 			Intent game = new Intent(this, Game.class);
 			game.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(game);
+			game.putExtra("gameLevel", 1);
+			startActivityForResult(game,0);
 		} else if (id == R.id.btn_tut) {
 			openPopup(MenuType.TUTORIAL);
 		} else if (id == R.id.btn_settings) {
 			openPopup(MenuType.SETTINGS);
-		} else if (id == R.id.btn_exit) {
-			Intent intent = new Intent();
-			intent.setAction(getString(R.string.shutdown_intent_action));
-			sendBroadcast(intent);
-			finish();
 		} else if (id == R.id.btn_closePopup) {
 			closePopup();
 		}

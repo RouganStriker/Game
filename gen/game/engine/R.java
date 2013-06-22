@@ -8,10 +8,10 @@ package game.engine;
 
 public final class R {
 	public static final class id {
-		public static final int buttonOverlay = 0x7f08000d;
-		public static final int surfaceView = 0x7f08000c;
-		public static final int button2 = 0x7f08000f;
-		public static final int button1 = 0x7f08000e;
+		public static final int buttonOverlay = 0x7f08000c;
+		public static final int surfaceView = 0x7f08000b;
+		public static final int button2 = 0x7f08000e;
+		public static final int button1 = 0x7f08000d;
 	}
 	public static final class string {
 		public static final int hello = 0x7f040000;

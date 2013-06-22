@@ -7,6 +7,7 @@ import game.engine.Engine;
 import game.engine.FadingDeathAnimation;
 import game.engine.Sprite;
 import game.engine.Timer;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -96,6 +97,10 @@ public class Game extends Engine{
 	@Override
 	public void collision(Sprite player) {
 		Log.d("Game", "Player died!");
+		end(player);
+	}
+
+	protected void end(Sprite player) {
 		player.removeAnimations();
 		player.addAnimation(new FadingDeathAnimation());
 		button1.setClickable(false);
@@ -106,6 +111,7 @@ public class Game extends Engine{
 	protected void initializeButtons(){
 		super.initializeButtons();
 		
+		button1.setText(R.string.btn_one);
 		button1.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -113,6 +119,9 @@ public class Game extends Engine{
 				playerController.playerJump();
 			}
 		});
+		
+		button2.setText(R.string.btn_two);
+		button2.setClickable(false);
 	}
 	
 	@Override
@@ -154,6 +163,24 @@ public class Game extends Engine{
 		}
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		setIntent(intent);
+		Log.d("Game","New Game Level:" + getIntent().getIntExtra("gameLevel", -1));
+		
+		if(getIntent().getIntExtra("gameLevel", -1) != -1) {
+			button1.setClickable(true);
+			setPauseState(true);
+			// Show pre level screen
+			levelController.resetLevel();
+			playerController.resetPlayer();
+			popupDialog.show();
+		}
+		
+	}
+	
 	protected void setupPauseMenu() {
 		AlertDialog.Builder menuBuilder = new AlertDialog.Builder(this);
 		menuBuilder.setTitle("Game Paused");
@@ -203,6 +230,7 @@ public class Game extends Engine{
     private final class ShutdownReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+        	Game.this.setResult(Activity.RESULT_OK);
             finish();
         }
     }
@@ -211,6 +239,8 @@ public class Game extends Engine{
     public void onCreate(Bundle savedInstanceState) {
     	// TODO Auto-generated method stub
     	super.onCreate(savedInstanceState);
+    	Log.d("Game","Game Level:" + getIntent().getIntExtra("gameLevel", 1));
+    	getIntent().removeExtra("gameLevel");
     }
     
     @Override
