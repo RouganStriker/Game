@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -68,7 +69,7 @@ public class Game extends Engine{
 	public void load() {
 		playerController = new PlayerController();
 		levelController = new LevelController();
-		setPauseState(true);
+		setPaused(true);
 		// Show pre level screen
 		popupDialog.show();
 	}
@@ -141,8 +142,8 @@ public class Game extends Engine{
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        Log.d("Game","pressed back button");
-	        onPause();
+	    	Log.d("Game","pressed back button");
+	        onPauseBehaviour();
 	        return true;
 	    }
 
@@ -150,13 +151,25 @@ public class Game extends Engine{
 	}
 	
 	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		pauseScreen();
+	protected void onResumeBehaviour() {
+		// Do nothing, unpausing is handled by pause menu
 	}
 
-	private void pauseScreen() {
+	@Override
+	protected void onPauseBehaviour() {
+		if(!isPaused()) {
+			// Superclass sets paused state, and increments pause counter
+			super.onPauseBehaviour();
+			openPauseScreen();
+		}
+	}
+	
+	protected void onUnpauseBehaviour() {
+		setPaused(false);
+		pauseMenu.dismiss();
+	}
+	
+	private void openPauseScreen() {
 		if(pauseMenu != null && !pauseMenu.isShowing()) {
 			Log.d("Game","showing pause menu");
 			pauseMenu.show();
@@ -172,7 +185,7 @@ public class Game extends Engine{
 		
 		if(getIntent().getIntExtra("gameLevel", -1) != -1) {
 			button1.setClickable(true);
-			setPauseState(true);
+			setPaused(true);
 			// Show pre level screen
 			levelController.resetLevel();
 			playerController.resetPlayer();
@@ -186,6 +199,13 @@ public class Game extends Engine{
 		menuBuilder.setTitle("Game Paused");
 		menuBuilder.setMessage("Return to main menu?");
 
+		menuBuilder.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				onUnpauseBehaviour();
+			}
+		});
+		
 		menuBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			Intent intent = new Intent();
@@ -197,7 +217,7 @@ public class Game extends Engine{
 
 		menuBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int whichButton) {
-		    onResume();
+		    onUnpauseBehaviour();
 		  }
 		});
 
@@ -209,9 +229,17 @@ public class Game extends Engine{
 		menuBuilder.setTitle("Level 1");
 		menuBuilder.setMessage("Click start to begin");
 
+		menuBuilder.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				((Game)Game.getInstance()).setPaused(false);
+				popupDialog.dismiss();
+			}
+		});
+
 		menuBuilder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
-			setPauseState(false);
+			((Game)Game.getInstance()).setPaused(false);
 			popupDialog.dismiss();
 		  }
 		});
@@ -219,13 +247,12 @@ public class Game extends Engine{
 		popupDialog = menuBuilder.create();
 	}
 
-	protected void onStop() {
-		Log.d("Game","game stopped");
-        super.onStop();
-        if (pauseMenu !=null && pauseMenu.isShowing()){
-        	pauseMenu.dismiss();
-        }
-    }
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		// Force a redraw of the canvas after app resumes from background
+		enableForceRedraw();
+	}
 	
     private final class ShutdownReceiver extends BroadcastReceiver {
         @Override
@@ -244,9 +271,18 @@ public class Game extends Engine{
     }
     
     @Override
+    protected void onStop() {
+    	// TODO Auto-generated method stub
+    	super.onStop();
+    	//pauseMenu.dismiss();
+    }
+    @Override
     protected void onDestroy() {
     	// TODO Auto-generated method stub
     	super.onDestroy();
+        if (pauseMenu !=null && pauseMenu.isShowing()){
+        	pauseMenu.dismiss();
+        }
     	levelController.destroy();
     	playerController.destroy();
         unregisterReceiver(mShutdownReceiver);
