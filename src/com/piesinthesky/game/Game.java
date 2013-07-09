@@ -5,7 +5,11 @@ import java.util.LinkedList;
 
 import game.engine.Engine;
 import game.engine.FadingDeathAnimation;
+import game.engine.Float2;
+import game.engine.ScalingBehaviour;
 import game.engine.Sprite;
+import game.engine.Texture;
+import game.engine.ThrobAnimation;
 import game.engine.Timer;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,7 +20,12 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -48,6 +57,9 @@ public class Game extends Engine{
 	private AlertDialog pauseMenu;
 	private AlertDialog popupDialog;
 	private boolean bGameStarted;
+	private boolean bGameOver;
+	
+	private Sprite gameOverSS;
 	@Override
 	public void init() {
         // Set shutdown receiver
@@ -58,11 +70,11 @@ public class Game extends Engine{
 		setScreenOrientation(Engine.ScreenModes.LANDSCAPE);
 		res = getResources();
 		timer = new Timer();
-		debug_showCollisionBoundaries = true;
 		instance = this;
 		setupPauseMenu();
 		setupPopupDialog();
 		bGameStarted = false;
+		bGameOver = false;
 	}
 
 	@Override
@@ -76,9 +88,34 @@ public class Game extends Engine{
 
 	@Override
 	public void draw() {
-		drawBackground();
-		levelController.draw();
-		playerController.drawPlayer();
+		if(!bGameOver) {
+			drawBackground();
+			levelController.draw();
+			playerController.drawPlayer();
+		} else {
+			canvasSize = new Point(getScreenWidth(), getScreenHeight());
+			Paint background = new Paint();
+			background.setColor(Color.BLACK);
+			getCanvas().drawPaint(background);
+			gameOverSS.draw();
+		}
+	}
+	
+	public Bitmap toGrayscale(Bitmap bmpOriginal)
+	{        
+        int width, height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();    
+
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmpGrayscale;
 	}
 
 	private void drawBackground() {
@@ -91,8 +128,12 @@ public class Game extends Engine{
 
 	@Override
 	public void update() {
-		playerController.animatePlayer();
-		levelController.updateLevel();
+		if(!bGameOver) {
+			playerController.animatePlayer();
+			levelController.updateLevel();
+		} else {
+			gameOverSS.animate();
+		}
 	}
 
 	@Override
@@ -103,10 +144,36 @@ public class Game extends Engine{
 
 	protected void end(Sprite player) {
 		player.removeAnimations();
-		player.addAnimation(new FadingDeathAnimation());
+		//player.addAnimation(new FadingDeathAnimation());
+
 		button1.setClickable(false);
 		button2.setClickable(false);
 		levelController.end();
+		
+		gameOverSS = Engine.createSprite();
+		Texture ss = new Texture(getApplicationContext());
+		ss.loadFromBitmap(toGrayscale(getScreenShot()));
+		gameOverSS.setTexture(ss);
+		gameOverSS.setPosition(new Float2(0,0));
+		bGameOver = true;
+		gameOverSS.addAnimation(new ScalingBehaviour(0.5f, 0.1f));
+		//Intent endScreen = new Intent(this, EndScreen.class);
+		//startActivityForResult(endScreen, 1);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  if (requestCode == 1) {
+	     if(resultCode == RESULT_OK){      
+	         boolean restart = data.getBooleanExtra("restart", false);
+	         
+	         if(restart) {
+	        	 // restart game
+	        	 
+	         } else {
+	        	 finish();
+	         }
+	     }
+	  }
 	}
 	
 	protected void initializeButtons(){

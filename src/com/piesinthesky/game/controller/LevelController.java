@@ -38,8 +38,7 @@ public class LevelController {
 		
 		Point blockSize = new Point(101, 121);
 		int nAvailableTiles = Engine.getInstance().getScreenWidth() / blockSize.x + 2;
-		int screenHeight = 295;
-		RectF boundary = new RectF(0 - blockSize.x, 0 - blockSize.y, blockSize.x * nAvailableTiles, screenHeight);
+		RectF boundary = new RectF(0 - blockSize.x, 0 - blockSize.y, blockSize.x * nAvailableTiles, Engine.getInstance().getScreenHeight());
 		Float2 vel = new Float2(-7, 0);
 
 		tileController  = new FloorObjController(boundary, vel, blockSize.x, nAvailableTiles);
@@ -48,6 +47,16 @@ public class LevelController {
 		retrieveNextFloorTileInstruction();
 	}
 	
+	public void resetLevel(){
+		nCurrentLevel = 1;
+		nCurrentFloorTile = 0;
+		bEndOfLevel = false;
+		nTileChangeCounter = 0;
+		tileController.reset();
+		obstacleController.reset();
+		setupInstructionsFloor(nCurrentLevel);
+	}
+
 	public void updateLevel(){
 		tileController.animate();
 		obstacleController.animate();

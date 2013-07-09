@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:id="@+id/end_title"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        android:text="Game Over"
+	        android:textSize="30sp"/>
+        <Button
+            android:id="@+id/btn_replay"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_below="@id/end_title"
+            android:text="Try Again" />
+        <Button 
+            style="@style/menuButton"
+	        android:id="@+id/btn_menu"
+	        android:text="To Main Menu"
+	        android:layout_below="@id/btn_replay"/>
+</RelativeLayout>

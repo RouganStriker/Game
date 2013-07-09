@@ -16,7 +16,6 @@ public class PlayerController {
 	private Engine engine;
 	private static final String PLAYER_BLOCK = "character_princess.png";
 	private static final Point PLAYER_BLOCK_SIZE = new Point(75, 99);
-	private final int SCREEN_HEIGHT = 295;
 	
 	public PlayerController() {	
 		engine = Game.getInstance();
@@ -28,9 +27,14 @@ public class PlayerController {
 
 		player = Engine.createSprite();
 		player.setTexture(playerTexture);
-		//player.setSize(PLAYER_BLOCK_SIZE);
-		player.setPosition(new Float2(0, SCREEN_HEIGHT - PLAYER_BLOCK_SIZE.y - 60));
+		player.setPosition(new Float2(0, Engine.getInstance().getScreenHeight() - PLAYER_BLOCK_SIZE.y - 60));
 		player.setCollidable(true);
+	}
+	
+	public void resetPlayer(){
+		player.setPosition(new Float2(0, Engine.getInstance().getScreenHeight() - PLAYER_BLOCK_SIZE.y - 60));
+		player.setCollidable(true);
+		player.setAlpha(255);
 	}
 	
 	public void drawPlayer(){

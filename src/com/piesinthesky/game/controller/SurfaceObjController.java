@@ -43,6 +43,21 @@ public class SurfaceObjController extends ObjController{
 		spr.setCollidable(true);
 		spriteList.add(spr);
 	}
+	
+	public void reset() {
+		//Texture texture = textureList[0].getTexture();
+		spriteList.addAll(spritePool);
+		spritePool.clear();
+		
+		for(int i = 0; i < spriteList.size(); i++){
+			Sprite spr = spriteList.get(i);
+			
+			spr.setCollidable(true);
+			spr.setPosition(new Float2(boundary.right - nBlockWidth, boundary.bottom - spr.getHeight() - nBlockHeight/2));
+		}
+		
+		setAnimating(true);
+	}
 
 	@Override
 	public void animate() {

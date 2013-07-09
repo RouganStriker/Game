@@ -1,5 +1,7 @@
 package com.piesinthesky.game.controller;
 
+import java.util.ListIterator;
+
 import game.engine.Engine;
 import game.engine.Float2;
 import game.engine.Sprite;
@@ -14,7 +16,6 @@ import com.piesinthesky.game.TexturePair;
 public class FloorObjController extends ObjController{
 	private int nFloorCounter;
 	private int nAvailableTiles;
-	private final int SCREEN_HEIGHT = 295;
 	
 	// Texture Assets
 	public static final String DIRT_BLOCK = "dirt_block.png";
@@ -84,6 +85,22 @@ public class FloorObjController extends ObjController{
 			floorTile.setCollidable(false);
 			spriteList.add(floorTile);
 		}
+	}
+	
+	public void reset(){
+		nFloorCounter = 0;
+		
+		Texture texture = textureList[0].getTexture();
+		spriteList.addAll(spritePool);
+		spritePool.clear();
+		
+		for(int i = 0; i < spriteList.size(); i++){
+			Sprite spr = spriteList.get(i);
+			spr.setTexture(texture);
+			spr.setPosition(new Float2(0 + (i * nBlockWidth), boundary.bottom - spr.getHeight()));
+		}
+		
+		setAnimating(true);
 	}
 	
 	public int getNumberOfTiles() {
